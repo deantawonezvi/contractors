@@ -1,0 +1,34 @@
+{
+  "name": "contractors",
+  "description": "Contractors Application",
+  "main": "",
+  "authors": [
+    "Dean T <deantawonezvi1@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Contractors"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#^1.6.4",
+    "sweetalert": "^1.1.3",
+    "font-awesome": "^4.7.0",
+    "angularUtils-pagination": "angular-utils-pagination#0.11.1",
+    "bs-enhance": "^1.0.0",
+    "animatelo": "^1.0.3",
+    "select2": "^4.0.3",
+    "jquery": "^3.2.1",
+    "bootstrap": "^3.3.7",
+    "pickadate": "^3.5.6"
+  }
+
+}
