@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Organisation;
+use App\Tender;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +28,14 @@ class HomeController extends Controller
     public function index()
     {
         if(Auth::user()->role == 'organisation'){
-            return view('home.organisation');
+
+        $organisation = Organisation::where('id','=', Auth::user()->organisation_id )
+                                    ->get();
+        $tender = Tender::where('organisation_id','=', Auth::user()->organisation_id )
+                                    ->with('tenderType')
+                                    ->get();
+            return view('home.organisation',['organisation'=>$organisation,
+                'tenders'=>$tender]);
         }
         return view('home.sub_contractor');
     }

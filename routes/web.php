@@ -17,6 +17,7 @@ Route::any('/tender/search', 'Controller@search');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/tender/add', 'HomeController@index')->name('add_tender');
 
 
 Route::resource('/tenders', 'TenderController');

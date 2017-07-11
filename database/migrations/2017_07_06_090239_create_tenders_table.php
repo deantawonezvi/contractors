@@ -31,6 +31,9 @@ class CreateTendersTable extends Migration
 
             $table->text('instructions');
 
+            $table->string('status')->default('pending');
+
+
             $table->timestamp('published_at')->nullable();
 
             $table->timestamp('closing_at')->nullable();

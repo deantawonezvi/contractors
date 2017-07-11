@@ -4,7 +4,7 @@
     <div class="container">
         <div class="middle-content">
             <center>
-                <img src="{{asset($tender->organisation->logo)}}" alt="tender_logo">
+                <img src="{{asset($tender->organisation->logo)}}" class="circle" alt="tender_logo">
                 <br><br>
                 <h1>
                     {{$tender->name}}

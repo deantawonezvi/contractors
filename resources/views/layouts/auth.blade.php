@@ -14,7 +14,6 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{asset('lib/select2/dist/css/select2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('lib/bs-enhance/bs-enhance.min.css')}}">
-    <link rel="stylesheet" href="{{asset('lib/font-awesome/css/font-awesome.css')}}">
 </head>
 <body>
 <div id="app">
@@ -45,10 +44,7 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
-                    @if(Auth::user()->role == 'organisation')
-                        <li><a href="{{route('tenders.create')}}">Add Tender</a></li>
-                    @endif
-                    <!-- Authentication Links -->
+                <!-- Authentication Links -->
                     @if (Auth::guest())
                         <li><a href="{{ route('login') }}">Login</a></li>
                         <li><a href="{{ route('register') }}">Register</a></li>

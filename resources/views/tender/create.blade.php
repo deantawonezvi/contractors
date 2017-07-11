@@ -2,15 +2,20 @@
 
 @section('content')
     <div class="container">
+        <div class="banner shadow-1" style="margin-top: 50px;">
+            <h2>
+                <a class="cyan-text" href="/home"><i class="fa fa-home"></i> Home</a>
+                <i class="fa fa-angle-right"></i>
+                <span>Tender</span>
+                <i class="fa fa-angle-right"></i>
+                <span>Create</span>
+            </h2>
+        </div>
+        <br><br>
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Create Tender</div>
-
-                    {{--
-                                        <img src="{{url(\App\Organisation::find(6)->logo)}}">
-                    --}}
-
+                <div class="card card-default card-body">
+                    <h2 class="center">CREATE TENDER</h2>
                     <div class="panel-body">
                         <form class="form-horizontal" role="form" method="POST" action="{{ url('tenders') }}"
                               enctype="multipart/form-data">
@@ -68,7 +73,7 @@
                                 <label for="tender_type_id" class="col-md-4 control-label">Tender Type</label>
 
                                 <div class="col-md-6">
-                                    <select name="tender_type_id" id="tender_type_id">
+                                    <select name="tender_type_id" id="tender_type_id" class="form-control">
                                         @foreach($tenderTypes as $item)
                                             <option value="{{$item->id}}">{{$item->name}}</option>
                                         @endforeach
@@ -86,7 +91,7 @@
                                 <label for="business_type_id" class="col-md-4 control-label">Tender Category</label>
 
                                 <div class="col-md-6">
-                                    <select name="business_type_id" id="tender_type_id">
+                                    <select name="business_type_id" id="tender_type_id" class="form-control">
                                         @foreach($businessTypes as $item)
                                             <option value="{{$item->id}}">{{$item->name}}</option>
                                         @endforeach
@@ -102,8 +107,8 @@
 
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Register
+                                    <button type="submit" class="btn btn-primary cyan white-text">
+                                        CREATE
                                     </button>
                                 </div>
                             </div>
