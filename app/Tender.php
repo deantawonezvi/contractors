@@ -19,4 +19,7 @@ class Tender extends Model
     public function organisation(){
         return $this->belongsTo(Organisation::class);
     }
+    public function billOfQuantity(){
+        return $this->belongsTo(BillOfQuantity::class);
+    }
 }

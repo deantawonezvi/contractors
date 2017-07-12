@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\BillOfQuantity;
 use App\BusinessType;
 use App\Tender;
 use App\TenderType;
@@ -23,6 +24,10 @@ class TenderController extends Controller
     }
 
     public function create(){
+
+        if(Auth::user()->role == 'sub_contractor'){
+            abort(404);
+        }
         $tenderTypes = TenderType::all();
         $businessTypes = BusinessType::all();
         return view('tender.create', ['tenderTypes'=>$tenderTypes, 'businessTypes'=>$businessTypes]);
@@ -68,5 +73,40 @@ class TenderController extends Controller
         return Tender::find($id)->update($request->except('_token'));
 
     }
+
+    public function viewTenderDetails(Request $request){
+        $bids = BillOfQuantity::where('tender_id','=',$request->id)
+                                ->with('SubContractor')
+                                ->get();
+        $tender = Tender::where('id','=',$request->id)
+                                ->with('tenderType')
+                                ->get();
+        return view('tender.details', ['bids'=>$bids,
+                                            'tender'=>$tender]);
+    }
+
+    public function approveTender(Request $request){
+
+        Tender::find($request->tender_id)
+                ->update(array('status'=>'approved',
+                                'bill_of_quantities_id'=>$request->boq_id));
+
+        return redirect()->back()->with('info', 'Tender Created Successfully!');
+
+    }
+
+    public function viewBidTender(Request $request){
+
+        if(Auth::user()->role == 'organisation'){
+            abort(404);
+        }
+        Tender::find($request->tender_id)
+                ->update(array('status'=>'approved',
+                                'bill_of_quantities_id'=>$request->boq_id));
+
+        return redirect()->back()->with('info', 'Approval Successful. The SubContractor will be notified immediately!');
+
+    }
+
 
 }

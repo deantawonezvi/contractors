@@ -60,11 +60,13 @@
             </div>
         </div>
         <br><br>
+        @if(Auth::user()->role = 'sub_contractor')
         <center>
-            <a href="" class="col-sm-12 btn btn-flat blue white-text">BID</a>
+            <a href="{{url('/bid/submit')}}" class="col-sm-12 btn btn-flat blue white-text">BID</a>
         </center>
         <br><br>
         <br><br>
+        @endif
 
     </div>
 @endsection

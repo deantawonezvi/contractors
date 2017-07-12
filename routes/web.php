@@ -14,6 +14,9 @@
 Route::get('/', 'Controller@welcome');
 Route::any('/tender/search', 'Controller@search');
 
+Route::any('/tender/details', 'TenderController@viewTenderDetails');
+Route::any('/bid/approve', 'TenderController@approveTender');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

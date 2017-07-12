@@ -1,0 +1,1 @@
+bits of blade to include in larger views

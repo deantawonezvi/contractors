@@ -21,7 +21,7 @@
         @foreach($tenders as $tender)
         <div class="card card-default card-body">
             <h4 class="cyan-text">
-                {{$tender->name}} - {{ucfirst($tender->status)}}
+                <a class="cyan-text" href="{{url("tender/details?id=$tender->id")}}">{{$tender->name}} - {{ucfirst($tender->status)}}</a>
             </h4>
             <br>
             <h5>
@@ -31,6 +31,5 @@
             <hr>
         @endforeach
     </div>
-    {{$tenders}}
 
 @endsection
