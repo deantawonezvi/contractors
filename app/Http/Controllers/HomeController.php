@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\BillOfQuantity;
 use App\Organisation;
+use App\SubContractor;
 use App\Tender;
 use App\User;
 use Illuminate\Http\Request;
@@ -37,6 +39,13 @@ class HomeController extends Controller
             return view('home.organisation',['organisation'=>$organisation,
                 'tenders'=>$tender]);
         }
-        return view('home.sub_contractor');
+
+        $sub_contractor = SubContractor::where('id','=', Auth::user()->sub_contractor_id )
+            ->get();
+        $tender = BillOfQuantity::where('sub_contractor_id','=', Auth::user()->sub_contractor_id )
+            ->with('tender.organisation')
+            ->get();
+        return view('home.sub_contractor',['sub_contractor'=>$sub_contractor,
+                                                'bids'=>$tender]);
     }
 }

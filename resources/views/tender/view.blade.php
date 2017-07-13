@@ -60,9 +60,14 @@
             </div>
         </div>
         <br><br>
-        @if(Auth::user()->role = 'sub_contractor')
+        @if(Auth::user()->role == 'sub_contractor')
         <center>
-            <a href="{{url('/bid/submit')}}" class="col-sm-12 btn btn-flat blue white-text">BID</a>
+            <form action="{{url('/bid/submit/view')}}" method="post">
+                {{csrf_field()}}
+                <input type="hidden" value="{{$tender->id}}" name="id">
+
+            <button class="col-sm-12 btn btn-flat blue white-text">ENTER BID</button>
+            </form>
         </center>
         <br><br>
         <br><br>

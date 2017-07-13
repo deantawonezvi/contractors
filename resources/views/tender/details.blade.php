@@ -72,7 +72,6 @@
             <br><br>
         @endif
     </div>
-
 @endsection
 
 

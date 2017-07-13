@@ -18,10 +18,9 @@ class CreateBillOfQuantitiesTable extends Migration
             $table->string('description');
             $table->unsignedInteger('sub_contractor_id');
             $table->foreign('sub_contractor_id')->references('id')->on('sub_contractors');
-
             $table->unsignedInteger('tender_id');
             $table->foreign('tender_id')->references('id')->on('tenders');
-
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

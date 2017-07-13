@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class BillOfQuantity extends Model
 {
+    protected $guarded = [];
+
+    protected $hidden = ['created_at','updated_at'];
+
     public function Tender(){
         return $this->belongsTo(Tender::class);
     }

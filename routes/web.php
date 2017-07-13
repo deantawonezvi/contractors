@@ -14,8 +14,10 @@
 Route::get('/', 'Controller@welcome');
 Route::any('/tender/search', 'Controller@search');
 
-Route::any('/tender/details', 'TenderController@viewTenderDetails');
+Route::get('/tender/details', 'TenderController@viewTenderDetails');
 Route::any('/bid/approve', 'TenderController@approveTender');
+Route::any('/bid/submit/view', 'TenderController@viewBidTender');
+Route::post('/bid/submit', 'TenderController@submitBidTender');
 
 Auth::routes();
 

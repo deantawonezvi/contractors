@@ -18,7 +18,9 @@ class TenderController extends Controller
     }
     public function index(){
 
-        $tenders = Tender::with('organisation.businessType','tenderType')->paginate(25);
+        $tenders = Tender::with('organisation.businessType','tenderType')
+                    ->where('status','=','pending')
+                    ->paginate(25);
 
         return $tenders;
     }
@@ -90,8 +92,14 @@ class TenderController extends Controller
         Tender::find($request->tender_id)
                 ->update(array('status'=>'approved',
                                 'bill_of_quantities_id'=>$request->boq_id));
+        BillOfQuantity::find($request->boq_id)
+                        ->update(array('status'=>'approved'));
+        BillOfQuantity::where('tender_id','=',$request->tender_id)
+                        ->where('status','not like','approved')
+                        ->update(array('status'=>'declined'));
 
-        return redirect()->back()->with('info', 'Tender Created Successfully!');
+
+        return redirect()->back()->with('info', 'Bid Accepted Successfully. Sub Contractor will be notified immediately!');
 
     }
 
@@ -100,12 +108,28 @@ class TenderController extends Controller
         if(Auth::user()->role == 'organisation'){
             abort(404);
         }
-        Tender::find($request->tender_id)
-                ->update(array('status'=>'approved',
-                                'bill_of_quantities_id'=>$request->boq_id));
+        $selected_tender =  Tender::with('tenderType', 'organisation')
+                                ->where('id','=',$request->id)
+                                ->get();
 
-        return redirect()->back()->with('info', 'Approval Successful. The SubContractor will be notified immediately!');
+        return view('tender.bid', ['tender'=>$selected_tender]);
 
+    }
+
+    public function submitBidTender(Request $request){
+
+        if(Auth::user()->role == 'organisation'){
+            abort(404);
+        }
+        Validator::make($request->all(), [
+            'tender_id' => 'required|exists:tenders,id',
+            'sub_contractor_id' => 'required|exists:sub_contractors,id',
+            'description' => 'required',
+        ])->validate();
+        BillOfQuantity::create($request->except('_token'));
+
+
+        return redirect()->route('home')->with('info', 'Bid Successful!');
     }
 
 
