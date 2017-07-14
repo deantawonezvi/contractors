@@ -81,7 +81,7 @@ class TenderController extends Controller
                                 ->with('SubContractor')
                                 ->get();
         $tender = Tender::where('id','=',$request->id)
-                                ->with('tenderType')
+                                ->with('tenderType','billOfQuantities.subContractor')
                                 ->get();
         return view('tender.details', ['bids'=>$bids,
                                             'tender'=>$tender]);

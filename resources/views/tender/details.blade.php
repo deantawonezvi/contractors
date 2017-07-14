@@ -11,8 +11,10 @@
                 @if( $tender[0]->status == 'pending')
                     <i class="fa fa-angle-right"></i>
                     <span>Current Bids</span>
+                @elseif($tender[0]->status == 'approved')
+                    <i class="fa fa-angle-right"></i>
+                    <span>Job Details</span>
                 @endif
-
             </h2>
         </div>
         <br>
@@ -66,12 +68,57 @@
         @elseif($tender[0]->status == 'approved')
             <center>
                 <h2 class="cyan-text">
-                    JOB STATUS
+                    JOB DETAILS
                 </h2>
             </center>
             <br><br>
+            <div class="card card-body card-default">
+                <div class="card-header">
+                    <h2> SUB CONTRACTOR
+                    </h2>
+                </div>
+                <br><br>
+                Name : {{json_decode($tender[0])->bill_of_quantities->sub_contractor->name}}<br>
+                Address : {{json_decode($tender[0])->bill_of_quantities->sub_contractor->address}}<br>
+                Email : {{json_decode($tender[0])->bill_of_quantities->sub_contractor->email}}<br>
+                Mobile : {{json_decode($tender[0])->bill_of_quantities->sub_contractor->mobile}}
+            </div>
+            <br>
+            <div class="card card-body card-default">
+                <div class="card-header">
+                    <h2> APPROVED BOQ
+                    </h2>
+                </div>
+                <br><br>
+                {{json_decode($tender[0])->bill_of_quantities->description}}<br>
+
+            </div>
+            <br>
+            <div class="card card-body card-default">
+                <div class="card-header">
+                    <h2> PURCHASE ORDER
+                    </h2>
+                </div>
+                <br>
+                <h3>
+                    UPLOAD PURCHASE ORDER
+                </h3>
+                <br>
+                <form action="" enctype="multipart/form-data">
+                    {{csrf_field()}}
+                    <input type="file" name="purchase_order" class="form-control">
+                    <input type="hidden" name="tender_id" value="{{$tender[0]->id}}" class="form-control">
+                    <br>
+                    <button class="btn btn-flat green white-text form-control" >
+                        SEND PURCHASE ORDER TO {{json_decode($tender[0])->bill_of_quantities->sub_contractor->name}}
+                    </button>
+
+                </form>
+
+            </div>
         @endif
     </div>
+    {{$tender}}
 @endsection
 
 

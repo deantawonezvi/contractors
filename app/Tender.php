@@ -19,7 +19,10 @@ class Tender extends Model
     public function organisation(){
         return $this->belongsTo(Organisation::class);
     }
-    public function billOfQuantity(){
+    public function billOfQuantities(){
         return $this->belongsTo(BillOfQuantity::class);
+    }
+    public function subContractor(){
+        return $this->belongsTo(SubContractor::class);
     }
 }
