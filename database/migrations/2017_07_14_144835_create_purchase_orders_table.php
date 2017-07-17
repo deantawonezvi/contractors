@@ -15,8 +15,10 @@ class CreatePurchaseOrdersTable extends Migration
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->string('status')->default('pending');
             $table->unsignedInteger('tender_id');
-            $table->foreign('tender_id')->references('id')->on('tenders');
+            $table->foreign('tender_id')->references('id')->on('tenders')->onDelete('cascade');
             $table->string('file');
             $table->timestamps();
         });

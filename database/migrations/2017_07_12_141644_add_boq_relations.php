@@ -15,7 +15,7 @@ class AddBoqRelations extends Migration
     {
         Schema::table('tenders', function (Blueprint $table) {
             $table->unsignedInteger('bill_of_quantities_id')->nullable();
-            $table->foreign('bill_of_quantities_id')->references('id')->on('bill_of_quantities');
+            $table->foreign('bill_of_quantities_id')->references('id')->on('bill_of_quantities')->onDelete('set null');
             //
         });
     }

@@ -47,8 +47,7 @@
                         BOQ
                         <br><br>
                         <h5>
-                            {{$bid->description}}
-
+                            <a href="{{asset($bid->file)}}" target="_self">{{$bid->file_name}}</a>
                         </h5>
                     </h2>
 
@@ -90,21 +89,32 @@
                     </h2>
                 </div>
                 <br><br>
-                {{json_decode($tender[0])->bill_of_quantities->description}}<br>
 
+                <a href="{{asset(json_decode($tender[0])->bill_of_quantities->file)}}" target="_self">{{json_decode($tender[0])->bill_of_quantities->file_name}}</a>
+                <br>
+                <div class="hidden">{{$tender_id = $tender[0]->id }}</div>
             </div>
             <br>
             <div class="card card-body card-default">
                 <div class="card-header">
-                    <h2> PURCHASE ORDER
+                    <h2> PURCHASE ORDERS
                     </h2>
                 </div>
                 <br>
                 <h3>
+                    UPLOADED PURCHASE ORDERS
+                </h3>
+                <br>
+                @foreach($purchase_orders as $purchase_order)
+                    <a href="{{asset($purchase_order->file)}}" target="_self">{{$purchase_order->name}}</a> <span><a
+                                href="{{url("/purchase_order/delete?tender_id=$tender_id&id=$purchase_order->id")}}" target="_self" class="red-text"><i class="fa fa-times"></i></a></span><br>
+                @endforeach
+                <hr class="divider-icon">
+                <h3>
                     UPLOAD PURCHASE ORDER
                 </h3>
                 <br>
-                <form action="" enctype="multipart/form-data">
+                <form action="{{url('/purchase_order/submit')}}" method="post" enctype="multipart/form-data">
                     {{csrf_field()}}
                     <input type="file" name="purchase_order" class="form-control">
                     <input type="hidden" name="tender_id" value="{{$tender[0]->id}}" class="form-control">
@@ -116,9 +126,10 @@
                 </form>
 
             </div>
+
         @endif
     </div>
-    {{$tender}}
+    <br><br>
 @endsection
 
 

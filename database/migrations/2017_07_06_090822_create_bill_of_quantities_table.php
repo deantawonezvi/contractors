@@ -15,7 +15,8 @@ class CreateBillOfQuantitiesTable extends Migration
     {
         Schema::create('bill_of_quantities', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description');
+            $table->string('file_name');
+            $table->string('file');
             $table->unsignedInteger('sub_contractor_id');
             $table->foreign('sub_contractor_id')->references('id')->on('sub_contractors');
             $table->unsignedInteger('tender_id');

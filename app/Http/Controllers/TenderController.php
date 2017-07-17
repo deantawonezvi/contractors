@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\BillOfQuantity;
 use App\BusinessType;
+use App\PurchaseOrder;
+use App\SubContractor;
 use App\Tender;
 use App\TenderType;
 use Illuminate\Http\Request;
@@ -77,14 +79,62 @@ class TenderController extends Controller
     }
 
     public function viewTenderDetails(Request $request){
+
         $bids = BillOfQuantity::where('tender_id','=',$request->id)
                                 ->with('SubContractor')
                                 ->get();
         $tender = Tender::where('id','=',$request->id)
                                 ->with('tenderType','billOfQuantities.subContractor')
                                 ->get();
+        $purchase_orders = PurchaseOrder::where('tender_id','=',$request->id)
+                                ->get();
+
+        if($tender[0]->organisation_id != Auth::user()->organisation_id){
+            abort(404);
+        }
         return view('tender.details', ['bids'=>$bids,
-                                            'tender'=>$tender]);
+                                            'tender'=>$tender,
+                                            'purchase_orders'=> $purchase_orders]);
+    }
+
+    public function viewJobDetails(Request $request){
+
+        $bids = BillOfQuantity::where('tender_id','=',$request->id)
+                                ->with('SubContractor')
+                                ->get();
+        $tender = Tender::where('id','=',$request->id)
+                                ->with('tenderType','billOfQuantities.subContractor','organisation')
+                                ->get();
+        $purchase_orders = PurchaseOrder::where('tender_id','=',$request->id)
+                                ->get();
+
+        if(json_decode($tender[0])->bill_of_quantities->sub_contractor->id != Auth::user()->sub_contractor_id){
+            abort(404);
+        }
+        return view('jobs.view', ['bids'=>$bids,
+                                            'tender'=>$tender,
+                                            'purchase_orders'=> $purchase_orders]);
+    }
+
+    public function declineJobDetails(Request $request){
+
+        BillOfQuantity::destroy($request->boq_id);
+        Tender::where('id','=',$request->tender_id)
+            ->update(['status'=>'pending']);
+        BillOfQuantity::where('tender_id','=',$request->tender_id)
+            ->update(['status'=>'pending']);
+        PurchaseOrder::where('tender_id','=',$request->tender_id)
+                    ->delete();
+
+        $sub_contractor = SubContractor::where('id','=', Auth::user()->sub_contractor_id )
+            ->get();
+        $tender = BillOfQuantity::where('sub_contractor_id','=', Auth::user()->sub_contractor_id )
+            ->with('tender.organisation')
+            ->get();
+        return view('home.sub_contractor',['sub_contractor'=>$sub_contractor,
+            'bids'=>$tender]);
+
+
     }
 
     public function approveTender(Request $request){
@@ -124,12 +174,26 @@ class TenderController extends Controller
         Validator::make($request->all(), [
             'tender_id' => 'required|exists:tenders,id',
             'sub_contractor_id' => 'required|exists:sub_contractors,id',
-            'description' => 'required',
+            'boq' => 'required | file',
         ])->validate();
-        BillOfQuantity::create($request->except('_token'));
+
+        $file = $request->file('boq');
+        $name = $file->getClientOriginalName();
+        $file->storeAs("public/boq/$request->tender_id", $name);
+        BillOfQuantity::create([
+            'tender_id'=>$request->tender_id,
+            'sub_contractor_id' =>$request->sub_contractor_id,
+            'file_name'=>$name,
+            'file'=>"storage/boq/$request->tender_id/$name"
+        ]);
 
 
         return redirect()->route('home')->with('info', 'Bid Successful!');
+    }
+
+    public function removeBidTender(Request $request){
+       BillOfQuantity::destroy($request->id);
+        return redirect()->route('home')->with('info', 'Rejected Bid Removed!');
     }
 
 

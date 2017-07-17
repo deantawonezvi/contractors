@@ -66,18 +66,11 @@
                         ENTER BOQ AS BID
                     </div>
 
-                    <form action="{{url('/bid/submit')}}" method="post">
+                    <form action="{{url('/bid/submit')}}" method="post" enctype="multipart/form-data">
                         {{csrf_field()}}
                         <input type="hidden" name="tender_id" value="{{$tender[0]->id}}">
                         <input type="hidden" name="sub_contractor_id" value="{{Auth::user()->sub_contractor_id}}">
-                        <textarea name="description" id="description" class="form-control" required>
-                        </textarea>
-
-                        @if ($errors->has('description'))
-                            <span class="help-block">
-                                        <strong>{{ $errors->first('description') }}</strong>
-                                    </span>
-                        @endif
+                        <input type="file" name="boq" class="form-control" required>
                         <br>
 
                         <button class="btn btn-flat blue white-text col-sm-12" type="submit">SUBMIT BID</button>

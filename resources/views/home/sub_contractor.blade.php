@@ -23,16 +23,26 @@
         @foreach($bids as $bid)
             <div class="card card-default card-body">
                 <div class="card-title">
-                    {{json_decode($bid)->tender->name}} - {{ucfirst($bid->status)}}
+                    {{json_decode($bid)->tender->name}} - {{ucfirst($bid->status)}}<br>
                 </div>
-                @if($bid->status == 'approved')
-                    <button class="btn btn-flat green white-text"> VIEW JOB </button>
+            Submitted BOQ - <a href="{{asset($bid->file)}}" target="_self">{{$bid->file_name}}</a>
+
+            @if($bid->status == 'approved')
+                    <form action="{{url('/tender/job/details')}}" method="post">
+                        {{csrf_field()}}
+                        <input type="hidden" name="id" value="{{json_decode($bid)->tender->id}}">
+                        <button type="submit" class="btn btn-flat green white-text"> VIEW JOB </button>
+                    </form>
                 @elseif($bid->status == 'declined')
-                    <button class="btn btn-flat red white-text"> REMOVE BID </button>
+                    <form action="{{url('/tender/job/delete')}}" method="post">
+                        {{csrf_field()}}
+                        <input type="hidden" name="id" value="{{$bid->id}}">
+                        <button class="btn btn-flat red white-text"> REMOVE BID </button>
+
+                    </form>
                 @endif
             </div>
             <hr>
         @endforeach
     </div>
-{{$bids}}
 @endsection
