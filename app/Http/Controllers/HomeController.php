@@ -39,6 +39,9 @@ class HomeController extends Controller
             return view('home.organisation',['organisation'=>$organisation,
                 'tenders'=>$tender]);
         }
+        elseif (Auth::user()->role == 'admin'){
+            return view('home.admin');
+        }
 
         $sub_contractor = SubContractor::where('id','=', Auth::user()->sub_contractor_id )
             ->get();

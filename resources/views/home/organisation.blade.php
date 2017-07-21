@@ -3,6 +3,8 @@
 @section('content')
 
     <div class="container">
+        @include('partials.info')
+        @include('partials.error')
         <div class="banner shadow-1" style="margin-top: 50px;">
             <h2>
                 <a class="cyan-text" href="/home"><i class="fa fa-home"></i> Home</a>
@@ -27,6 +29,8 @@
             <h5>
                 {{$tender->description}}
             </h5>
+            <br>
+            <a href="{{url("/tender/delete?id=$tender->id")}}" class="btn btn-flat red white-text">Delete</a>
         </div>
             <hr>
         @endforeach

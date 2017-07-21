@@ -15,6 +15,7 @@ Route::get('/', 'Controller@welcome');
 Route::any('/tender/search', 'Controller@search');
 
 Route::get('/tender/details', 'TenderController@viewTenderDetails');
+Route::get('/tender/delete', 'TenderController@deleteTender');
 Route::any('/tender/job/details', 'TenderController@viewJobDetails');
 Route::any('/tender/job/delete', 'TenderController@removeBidTender');
 Route::any('/tender/job/decline', 'TenderController@declineJobDetails');
@@ -28,6 +29,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/tender/add', 'HomeController@index')->name('add_tender');
+
+
+
+Route::get('/admin/all', 'Controller@getAllAdmins');
+Route::post('/admin/add', 'Controller@addAdmin');
+Route::post('/admin/delete', 'Controller@deleteAdmin');
+Route::get('/organisation/all', 'OrganisationController@getAllOrganisations');
+Route::get('/sub-contractor/all', 'OrganisationController@getAllSubContractors');
 
 
 Route::resource('/tenders', 'TenderController');

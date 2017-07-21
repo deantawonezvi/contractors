@@ -14,8 +14,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
+    protected $guarded = [
     ];
 
     /**
@@ -26,4 +25,13 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function organisation(){
+        return $this->belongsTo(Organisation::class);
+    }
+    public function subContractor(){
+        return $this->belongsTo(SubContractor::class);
+    }
+
+
 }

@@ -15,6 +15,9 @@
     <link href="{{asset('lib/select2/dist/css/select2.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('lib/bs-enhance/bs-enhance.min.css')}}">
     <link rel="stylesheet" href="{{asset('lib/font-awesome/css/font-awesome.css')}}">
+    <link rel="stylesheet" href="{{asset('lib/pickadate/lib/themes/default.css')}}">
+    <link rel="stylesheet" href="{{asset('lib/pickadate/lib/themes/default.date.css')}}">
+    @yield('styles')
 </head>
 <body>
 <div id="app">
@@ -84,12 +87,20 @@
 </div>
 
 <!-- Scripts -->
-<script src="{{ asset('js/app.js') }}"></script>
-<script src="{{ asset('lib/angular/angular.min.js') }}"></script>
-<script src="{{ asset('js/index.min.js') }}"></script>
+<script src="{{ asset('lib/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('lib/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <script src="{{asset('lib/select2/dist/js/select2.js')}}"></script>
+<script src="{{asset('lib/pickadate/lib/picker.js')}}"></script>
+<script src="{{asset('lib/pickadate/lib/picker.date.js')}}"></script>
+@yield('scripts')
 <script>
     $(document).ready(function () {
+        $('.date-picker').pickadate({
+            selectMonths: true,
+            selectYears: true,
+            formatSubmit:'dd/mm/yyy'
+        });
+
         $('.select2-select').select2({
             allowClear: true,
             placeholder: 'Select An Option'

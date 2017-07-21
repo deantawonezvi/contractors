@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Tender;
+use App\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Validator;
+use Monolog\Handler\UdpSocketTest;
 
 class Controller extends BaseController
 {
@@ -66,4 +68,39 @@ class Controller extends BaseController
             'businessTypes'=>$availableBusinessTypes,
         ]);
     }
+
+    public function getAllAdmins(Request $request){
+        return User::with('organisation','subContractor')
+                    ->get();
+    }
+
+    public function addAdmin(Request $request){
+        Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'role'=>'required'
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt('123456'),
+            'role'=>$request->role,
+            'organisation_id'=>$request->organisation_id,
+            'sub_contractor_id'=>$request->sub_contractor_id,
+        ]);
+
+        return 'User Created Successfully!';
+    }
+
+    public function deleteAdmin(Request $request)
+    {
+        User::destroy($request->id);
+
+        return 'User Deleted!';
+
+    }
+
+
+
 }

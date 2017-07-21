@@ -105,6 +105,21 @@
                                 </div>
                             </div>
 
+                            <div class="form-group{{ $errors->has('closing_date') ? ' has-error' : '' }}">
+                                <label for="closing_date" class="col-md-4 control-label">Closing Date</label>
+
+                                <div class="col-md-6">
+                                    <input type="date" name="closing_date" id="closing_date" class="form-control date-picker">
+
+
+                                    @if ($errors->has('closing_date'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('closing_date') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <div class="col-md-6 col-md-offset-4">
                                     <button type="submit" class="btn btn-primary cyan white-text">
