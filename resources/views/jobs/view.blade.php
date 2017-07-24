@@ -29,7 +29,7 @@
             </center>
             <br>
 
-                @if($purchase_orders[0]->status == 'pending')
+            @if($purchase_orders[0]->status == 'pending')
                 <form action="{{url('/tender/job/decline')}}" method="post">
                     {{csrf_field()}}
                     <input type="hidden" name="tender_id" value="{{$tender[0]->id}}">
@@ -38,7 +38,7 @@
                         DECLINE JOB
                     </button>
                 </form>
-                @endif
+            @endif
 
             <br><br>
             <div class="card card-body card-default">
@@ -60,7 +60,8 @@
                 </div>
                 <br><br>
 
-                <a href="{{asset(json_decode($tender[0])->bill_of_quantities->file)}}" target="_self">{{json_decode($tender[0])->bill_of_quantities->file_name}}</a>
+                <a href="{{asset(json_decode($tender[0])->bill_of_quantities->file)}}"
+                   target="_self">{{json_decode($tender[0])->bill_of_quantities->file_name}}</a>
                 <br>
                 <div class="hidden">{{$tender_id = $tender[0]->id }}</div>
             </div>
@@ -78,14 +79,55 @@
                 @foreach($purchase_orders as $purchase_order)
                     <a href="{{asset($purchase_order->file)}}" target="_self">{{$purchase_order->name}}</a><br>
                 @endforeach
-                <hr>
-                <h3>
-                    Accept Purchase Order
+            </div>
+            <br>
+            <br>
+            @if(sizeof($job_files) !=0)
+                <div class="card card-default card-body">
+                    <div class="card-header">
+                        <h2>JOB STATUS - {{ucfirst($job_files[0]->status)}}</h2>
+                    </div>
+                    <br>
+                    @if($job_files[0]->description)
+                    Comment - {{$job_files[0]->description}}
+                    @endif
+                </div>
+            @endif
 
+            <br>
+            <br>
+            <div class="card card-body card-default">
+                <div class="card-header">
+                    <h2> JOB DOCUMENTS
+                    </h2>
+                </div>
+                <br>
+                <h3>
+                    UPLOADED JOB DOCUMENTS
                 </h3>
                 <br>
-                <a href="{{url('')}}" class="btn btn-flat green white-text">Accept</a>
-                <a href="{{url('')}}" class="btn btn-flat red white-text">Decline</a>
+                @foreach($job_files as $job_file)
+                    <a href="{{asset($job_file->file)}}" target="_self">{{$job_file->name}}</a> <span><a
+                                href="{{url("/job_file/delete?tender_id=$tender_id&id=$job_file->id")}}"
+                                target="_self" class="red-text"><i class="fa fa-times"></i></a></span><br>
+
+                @endforeach
+                <hr class="divider-icon">
+                <h3>
+                    UPLOAD JOB DOCUMENTS
+                </h3>
+                <br>
+                <form action="{{url('/job_file/submit')}}" method="post" enctype="multipart/form-data">
+                    {{csrf_field()}}
+                    <input type="file" name="job_file" class="form-control">
+                    <input type="hidden" name="tender_id" value="{{$tender[0]->id}}" class="form-control">
+                    <br>
+                    <button class="btn btn-flat green white-text form-control" >
+                        SEND JOB FILE TO {{json_decode($tender[0])->organisation->name}}
+                    </button>
+
+                </form>
+
             </div>
 
         @endif

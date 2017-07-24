@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BillOfQuantity;
 use App\BusinessType;
+use App\JobFiles;
 use App\PurchaseOrder;
 use App\SubContractor;
 use App\Tender;
@@ -106,13 +107,18 @@ class TenderController extends Controller
             ->get();
         $purchase_orders = PurchaseOrder::where('tender_id', '=', $request->id)
             ->get();
+        $job_files = JobFiles::where('tender_id', '=', $request->id)
+            ->get();
 
         if ($tender[0]->organisation_id != Auth::user()->organisation_id) {
             abort(404);
         }
-        return view('tender.details', ['bids' => $bids,
+        return view('tender.details', [
+            'bids' => $bids,
             'tender' => $tender,
-            'purchase_orders' => $purchase_orders]);
+            'purchase_orders' => $purchase_orders,
+            'job_files' => $job_files
+        ]);
     }
 
     public function viewJobDetails(Request $request)
@@ -126,13 +132,17 @@ class TenderController extends Controller
             ->get();
         $purchase_orders = PurchaseOrder::where('tender_id', '=', $request->id)
             ->get();
+        $job_files = JobFiles::where('tender_id', '=', $request->id)
+            ->get();
 
         if (json_decode($tender[0])->bill_of_quantities->sub_contractor->id != Auth::user()->sub_contractor_id) {
             abort(404);
         }
         return view('jobs.view', ['bids' => $bids,
             'tender' => $tender,
-            'purchase_orders' => $purchase_orders]);
+            'purchase_orders' => $purchase_orders,
+            'job_files'=>$job_files
+        ]);
     }
 
     public function declineJobDetails(Request $request)

@@ -71,6 +71,8 @@
                 </h2>
             </center>
             <br><br>
+            <button class="btn btn-flat">VIEW JOB TIMELINE</button>
+            <br><br>
             <div class="card card-body card-default">
                 <div class="card-header">
                     <h2> SUB CONTRACTOR
@@ -90,7 +92,8 @@
                 </div>
                 <br><br>
 
-                <a href="{{asset(json_decode($tender[0])->bill_of_quantities->file)}}" target="_self">{{json_decode($tender[0])->bill_of_quantities->file_name}}</a>
+                <a href="{{asset(json_decode($tender[0])->bill_of_quantities->file)}}"
+                   target="_self">{{json_decode($tender[0])->bill_of_quantities->file_name}}</a>
                 <br>
                 <div class="hidden">{{$tender_id = $tender[0]->id }}</div>
             </div>
@@ -107,7 +110,8 @@
                 <br>
                 @foreach($purchase_orders as $purchase_order)
                     <a href="{{asset($purchase_order->file)}}" target="_self">{{$purchase_order->name}}</a> <span><a
-                                href="{{url("/purchase_order/delete?tender_id=$tender_id&id=$purchase_order->id")}}" target="_self" class="red-text"><i class="fa fa-times"></i></a></span><br>
+                                href="{{url("/purchase_order/delete?tender_id=$tender_id&id=$purchase_order->id")}}"
+                                target="_self" class="red-text"><i class="fa fa-times"></i></a></span><br>
                 @endforeach
                 <hr class="divider-icon">
                 <h3>
@@ -119,15 +123,64 @@
                     <input type="file" name="purchase_order" class="form-control">
                     <input type="hidden" name="tender_id" value="{{$tender[0]->id}}" class="form-control">
                     <br>
-                    <button class="btn btn-flat green white-text form-control" >
+                    <button class="btn btn-flat green white-text form-control">
                         SEND PURCHASE ORDER TO {{json_decode($tender[0])->bill_of_quantities->sub_contractor->name}}
                     </button>
 
                 </form>
 
             </div>
+            <br><br>
+
+            @if( sizeof($job_files) != 0)
+                <div class="card card-body card-default">
+                    <div class="card-header">
+                        <h2>
+                            APPROVE SUBMITTED JOB
+                        </h2>
+                    </div>
+                    <br>
+
+                    <h3 class="blue-grey-text">
+                        Uploaded Job Documents
+                    </h3>
+                    <br>
+                    @foreach($job_files as $job_file)
+                        <a href="{{asset($job_file->file)}}" target="_self">{{$job_file->name}}</a><br>
+                    @endforeach
+                    <br>
+                    <hr class="divider-icon">
+                    <form action="{{url('/job/approve')}}" method="post">
+                        {{csrf_field()}}
+                        <input type="hidden" name="tender_id" value="{{$tender[0]->id}}" class="form-control">
+
+                        <div class="form-group{{ $errors->has('comment') ? ' has-error' : '' }}">
+                            <label for="comment">Comment</label>
+
+                            <textarea name="comment" id="comment" class="form-control" required></textarea>
+
+                            @if ($errors->has('comment'))
+                                <span class="help-block">
+                                        <strong>{{ $errors->first('comment') }}</strong>
+                                    </span>
+                            @endif
+
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" name="approve" value="yes" class="btn btn-flat green white-text">
+                                Approve Job
+                            </button>
+                            <button type="submit" name="approve" value="no" class="btn btn-flat red white-text">Decline
+                                Job
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            @endif
+
 
         @endif
+        {{$job_files}}
     </div>
     <br><br>
 @endsection

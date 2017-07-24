@@ -22,6 +22,13 @@ Route::any('/tender/job/decline', 'TenderController@declineJobDetails');
 Route::any('/bid/approve', 'TenderController@approveTender');
 Route::any('/bid/submit/view', 'TenderController@viewBidTender');
 Route::post('/bid/submit', 'TenderController@submitBidTender');
+
+Route::any('/job_file/submit', 'JobFilesController@uploadJobFile');
+Route::any('/job_file/delete', 'JobFilesController@deleteJobFile');
+
+Route::any('/job/approve', 'JobFilesController@approveJob');
+
+
 Route::post('/purchase_order/submit', 'PurchaseOrderController@uploadPurchaseOrder');
 Route::get('/purchase_order/delete', 'PurchaseOrderController@deletePurchaseOrder');
 
