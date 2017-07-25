@@ -30,7 +30,9 @@
                 {{$tender->description}}
             </h5>
             <br>
+            @if($tender->status == 'pending')
             <a href="{{url("/tender/delete?id=$tender->id")}}" class="btn btn-flat red white-text">Delete</a>
+            @endif
         </div>
             <hr>
         @endforeach

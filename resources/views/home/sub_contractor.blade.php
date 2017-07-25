@@ -27,7 +27,7 @@
                 </div>
             Submitted BOQ - <a href="{{asset($bid->file)}}" target="_self">{{$bid->file_name}}</a>
 
-            @if($bid->status == 'approved')
+                @if(strpos($bid->status, 'approved') !== FALSE)
                     <form action="{{url('/tender/job/details')}}" method="post">
                         {{csrf_field()}}
                         <input type="hidden" name="id" value="{{json_decode($bid)->tender->id}}">

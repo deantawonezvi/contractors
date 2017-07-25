@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BillOfQuantity;
 use App\BusinessType;
+use App\Invoice;
 use App\JobFiles;
 use App\PurchaseOrder;
 use App\SubContractor;
@@ -109,6 +110,8 @@ class TenderController extends Controller
             ->get();
         $job_files = JobFiles::where('tender_id', '=', $request->id)
             ->get();
+        $invoices = Invoice::where('tender_id', '=', $request->id)
+            ->get();
 
         if ($tender[0]->organisation_id != Auth::user()->organisation_id) {
             abort(404);
@@ -117,7 +120,8 @@ class TenderController extends Controller
             'bids' => $bids,
             'tender' => $tender,
             'purchase_orders' => $purchase_orders,
-            'job_files' => $job_files
+            'job_files' => $job_files,
+            'invoices' => $invoices
         ]);
     }
 

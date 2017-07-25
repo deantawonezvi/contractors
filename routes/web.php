@@ -32,6 +32,9 @@ Route::any('/job/approve', 'JobFilesController@approveJob');
 Route::post('/purchase_order/submit', 'PurchaseOrderController@uploadPurchaseOrder');
 Route::get('/purchase_order/delete', 'PurchaseOrderController@deletePurchaseOrder');
 
+Route::post('/invoice/submit', 'InvoiceController@uploadInvoice');
+Route::get('/invoice/delete', 'InvoiceController@deleteInvoice');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

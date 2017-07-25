@@ -4,23 +4,56 @@ namespace App\Http\Controllers;
 
 use App\BillOfQuantity;
 use App\JobFiles;
+use App\Organisation;
 use App\PurchaseOrder;
 use App\Tender;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class JobFilesController extends Controller
 {
     public function approveJob(Request $request)
     {
-        if($request->approve == 'yes'){
+        $organisation = Organisation::where('id','=', Auth::user()->organisation_id )
+            ->get();
+        $tender = Tender::where('organisation_id','=', Auth::user()->organisation_id )
+            ->with('tenderType')
+            ->get();
+        if ($request->approve == 'yes') {
+            JobFiles::where('tender_id', '=', $request->tender_id)
+                ->update(['status' => 'Job Approved',
+                    'description' => $request->comment]);
+            Tender::where('id','=',$request->tender_id)
+                ->update(['status'=>'Job approved. Awaiting Invoice Submission']);
+            BillOfQuantity::where('tender_id','=',$request->tender_id)
+                ->update(['status'=>'Job approved. Awaiting Invoice Submission']);
+
+
+            if ($tender[0]->organisation_id != Auth::user()->organisation_id) {
+                abort(404);
+            }
+
+            return redirect()->back()->with([
+                'success' => 'Job Approval has been sent to the Sub Contractor!',
+
+                'organisation' => $organisation,
+                'tender' => $tender,
+
+            ]);
 
         }
 
         Validator::make($request->all(), [
             'comment' => 'required',
         ])->validate();
-        return 'declined';
+        JobFiles::where('tender_id', '=', $request->tender_id)
+            ->update(['description' => $request->comment]);
+        return redirect()->back()->with([
+            'warning' => 'Your comments have been sent to the Sub Contractor!',
+            'organisation' => $organisation,
+            'tender' => $tender,
+        ]);
 
     }
 
@@ -47,7 +80,7 @@ class JobFilesController extends Controller
             ->with('SubContractor')
             ->get();
         $tender = Tender::where('id', '=', $request->tender_id)
-            ->with('tenderType', 'billOfQuantities.subContractor','organisation')
+            ->with('tenderType', 'billOfQuantities.subContractor', 'organisation')
             ->get();
 
         $purchase_orders = PurchaseOrder::where('tender_id', '=', $request->tender_id)
@@ -56,7 +89,7 @@ class JobFilesController extends Controller
             ->get();
 
         return redirect()->home()->with([
-            'info'=>'Job File Upload Successful!',
+            'info' => 'Job File Upload Successful!',
             'bids' => $bids,
             'tender' => $tender,
             'purchase_orders' => $purchase_orders,
@@ -79,7 +112,7 @@ class JobFilesController extends Controller
         $job_files = JobFiles::where('tender_id', '=', $request->tender_id)
             ->get();
         return redirect()->home()->with([
-            'warning'=>'Job File Deleted!',
+            'warning' => 'Job File Deleted!',
             'bids' => $bids,
             'tender' => $tender,
             'job_files' => $job_files

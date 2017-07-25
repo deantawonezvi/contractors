@@ -36,11 +36,24 @@ class HomeController extends Controller
         $tender = Tender::where('organisation_id','=', Auth::user()->organisation_id )
                                     ->with('tenderType')
                                     ->get();
+
             return view('home.organisation',['organisation'=>$organisation,
                 'tenders'=>$tender]);
         }
         elseif (Auth::user()->role == 'admin'){
             return view('home.admin');
+        }
+        elseif (Auth::user()->role == 'finance'){
+            $organisation = Organisation::where('id','=', Auth::user()->organisation_id )
+                ->get();
+            $tender = Tender::where('organisation_id','=', Auth::user()->organisation_id )
+                ->where('status','not like','pending')
+                ->with('tenderType')
+                ->get();
+
+
+            return view('home.finance',['organisation'=>$organisation,
+                'tenders'=>$tender]);
         }
 
         $sub_contractor = SubContractor::where('id','=', Auth::user()->sub_contractor_id )
