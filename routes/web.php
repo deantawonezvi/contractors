@@ -35,6 +35,9 @@ Route::get('/purchase_order/delete', 'PurchaseOrderController@deletePurchaseOrde
 Route::post('/invoice/submit', 'InvoiceController@uploadInvoice');
 Route::get('/invoice/delete', 'InvoiceController@deleteInvoice');
 
+Route::post('/payment/submit', 'PaymentController@uploadPayment');
+Route::get('/payment/delete', 'PaymentController@deletePayment');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

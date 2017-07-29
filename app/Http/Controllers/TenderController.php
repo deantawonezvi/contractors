@@ -6,6 +6,7 @@ use App\BillOfQuantity;
 use App\BusinessType;
 use App\Invoice;
 use App\JobFiles;
+use App\Payment;
 use App\PurchaseOrder;
 use App\SubContractor;
 use App\Tender;
@@ -112,6 +113,8 @@ class TenderController extends Controller
             ->get();
         $invoices = Invoice::where('tender_id', '=', $request->id)
             ->get();
+        $payments = Payment::where('tender_id', '=', $request->id)
+            ->get();
 
         if ($tender[0]->organisation_id != Auth::user()->organisation_id) {
             abort(404);
@@ -121,7 +124,8 @@ class TenderController extends Controller
             'tender' => $tender,
             'purchase_orders' => $purchase_orders,
             'job_files' => $job_files,
-            'invoices' => $invoices
+            'invoices' => $invoices,
+            'payments'=>$payments
         ]);
     }
 
@@ -138,6 +142,10 @@ class TenderController extends Controller
             ->get();
         $job_files = JobFiles::where('tender_id', '=', $request->id)
             ->get();
+        $invoices = Invoice::where('tender_id', '=', $request->id)
+            ->get();
+        $payments = Payment::where('tender_id', '=', $request->id)
+            ->get();
 
         if (json_decode($tender[0])->bill_of_quantities->sub_contractor->id != Auth::user()->sub_contractor_id) {
             abort(404);
@@ -145,7 +153,9 @@ class TenderController extends Controller
         return view('jobs.view', ['bids' => $bids,
             'tender' => $tender,
             'purchase_orders' => $purchase_orders,
-            'job_files'=>$job_files
+            'job_files'=>$job_files,
+            'invoices' => $invoices,
+            'payments'=>$payments
         ]);
     }
 

@@ -267,6 +267,28 @@
                         <a href="{{asset($invoice->file)}}" target="_self">{{$invoice->name}}</a><br>
                     @endforeach
                     <br>
+                    <hr>
+                    <h3>
+                        Proof Of Payment
+                    </h3>
+                    <br>
+                    @foreach($payments as $payment)
+                        <a href="{{asset($payment->file)}}" target="_self">{{$payment->name}}</a> <span><a
+                                    href="{{url("/payment/delete?tender_id=$tender_id&id=$payment->id")}}"
+                                    target="_self" class="red-text"><i class="fa fa-times"></i></a></span><br>
+                    @endforeach
+                    <br>
+                    <form action="{{url('/payment/submit')}}" method="post" enctype="multipart/form-data">
+                        {{csrf_field()}}
+                        <input type="file" name="payment" class="form-control">
+                        <input type="hidden" name="tender_id" value="{{$tender[0]->id}}" class="form-control">
+                        <br>
+                        <button class="btn btn-flat green white-text form-control">
+                            SEND PROOF OF PAYMENT TO {{json_decode($tender[0])->bill_of_quantities->sub_contractor->name}}
+                        </button>
+
+                    </form>
+
 
                 </div>
 
@@ -274,7 +296,6 @@
 
         @endif
     </div>
-    {{$invoices}}
     <br><br>
 @endsection
 
